@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.13
+VisualStudioVersion = 15.0.27428.2043
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "BirchEngine\BirchEngine.vcxproj", "{CE353F93-BF7C-4368-BE55-A8C0FAF6E793}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Engine\BirchEngine.vcxproj", "{CE353F93-BF7C-4368-BE55-A8C0FAF6E793}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +26,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {BF6E557B-8DAA-4542-BBF6-D3B423F1E1D8}
+		SolutionGuid = {F6A074AA-2B66-46A7-8B30-6502D70C0E7C}
 	EndGlobalSection
 EndGlobal
