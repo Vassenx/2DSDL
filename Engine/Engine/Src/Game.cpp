@@ -81,7 +81,7 @@ void Game::update()
 
 		player.getComponent<SpriteComponent>().setTex("Assets/enemy.png");
 	}
-	std::cout << player.getComponent<TransformComponent>().position.y << std::endl;
+	std::cout << "Hi Sam Hi Sam Hi Sam" << std::endl;
 /*	player->Update();
 	//updates entities and thus updates all the components
 	
