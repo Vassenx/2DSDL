@@ -1,12 +1,5 @@
 ﻿  main.cpp
-main.obj : error LNK2019: unresolved external symbol _SDL_CreateWindow referenced in function _SDL_main
-main.obj : error LNK2019: unresolved external symbol _SDL_CreateRenderer referenced in function _SDL_main
-main.obj : error LNK2019: unresolved external symbol _SDL_SetRenderDrawColor referenced in function _SDL_main
-main.obj : error LNK2019: unresolved external symbol _SDL_RenderClear referenced in function _SDL_main
-main.obj : error LNK2019: unresolved external symbol _SDL_RenderPresent referenced in function _SDL_main
-main.obj : error LNK2019: unresolved external symbol _SDL_Delay referenced in function _SDL_main
-main.obj : error LNK2019: unresolved external symbol _SDL_Init referenced in function _SDL_main
-MSVCRTD.lib(exe_main.obj) : error LNK2019: unresolved external symbol _main referenced in function "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ)
-C:\Dev\SDL2\lib\x64\SDL2.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
-C:\Dev\SDL2\lib\x64\SDL2main.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
-C:\Dev\FirstSDL\Debug\FirstSDL.exe : fatal error LNK1120: 8 unresolved externals
+c:\dev\2dsdl\firstsdl\firstsdl\main.cpp(1): fatal error C1083: Cannot open include file: 'SDL.h': No such file or directory
+  Game.cpp
+c:\dev\2dsdl\firstsdl\firstsdl\game.h(4): fatal error C1083: Cannot open include file: 'SDL.h': No such file or directory
+  Generating Code...
