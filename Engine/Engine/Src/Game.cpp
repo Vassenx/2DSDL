@@ -5,12 +5,13 @@
 #include "Vector2D.h"
 
 Map *map;
+Manager manager;
 
 //The game renderer, static 
 SDL_Renderer *Game::renderer = nullptr;
+SDL_Event Game::event;
 
 //adds a new player to the entities
-Manager manager;
 auto& player(manager.addEntity());
 
 Game::Game()
@@ -49,6 +50,7 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 
 	player.addComponent<TransformComponent>();
 	player.addComponent<SpriteComponent>("Assets/player.png");
+	player.addComponent<KeyboardController>();
 	//starts at 500 500 position
    // player.getComponent<PositionComponent>().setPos(500, 500);
 	
@@ -57,7 +59,6 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 
 void Game::handleEvents()
 {
-	SDL_Event event;
 
 	SDL_PollEvent(&event);
 
@@ -76,17 +77,9 @@ void Game::update()
 	manager.refresh();
 	manager.update();
 
-	player.getComponent<TransformComponent>().position.Add(Vector2D(5, 0));
-	if (player.getComponent<TransformComponent>().position.x > 100) {
-
-		player.getComponent<SpriteComponent>().setTex("Assets/enemy.png");
-	}
-	std::cout << "Hi Sam Hi Sam Hi Sam" << std::endl;
+	//player.getComponent<SpriteComponent>().setTex("Assets/enemy.png");
 /*	player->Update();
 	//updates entities and thus updates all the components
-	
-	std::cout << newPlayer.getComponent<PositionComponent>().x() << "," <<
-		newPlayer.getComponent<PositionComponent>().y() << std::endl;
 	//map->LoadMap();
 */
 }

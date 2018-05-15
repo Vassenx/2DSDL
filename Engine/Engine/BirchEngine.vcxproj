@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{CE353F93-BF7C-4368-BE55-A8C0FAF6E793}</ProjectGuid>
     <RootNamespace>BirchEngine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
     <ProjectName>Engine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClInclude Include="Src\ECS\Components.h" />
     <ClInclude Include="Src\ECS\ECS.h" />
+    <ClInclude Include="Src\ECS\KeyboardController.h" />
     <ClInclude Include="Src\ECS\TransformComponent.h" />
     <ClInclude Include="Src\ECS\SpriteComponent.h" />
     <ClInclude Include="Src\Game.h" />
