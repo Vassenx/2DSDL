@@ -45,6 +45,7 @@ public:
 	virtual ~Component() {}
 };
 
+//has all entities in the class
 class Entity {
 
 private:

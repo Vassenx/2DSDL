@@ -22,6 +22,10 @@ public:
 			entity->addComponent<TransformComponent>();
 		}
 		transform = &entity->getComponent<TransformComponent>();
+
+		//push_back: adds this to end of vector
+		Game::colliders.push_back(this);
+
 	}
 
 	void update() override {

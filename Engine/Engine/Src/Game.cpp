@@ -12,9 +12,10 @@ Manager manager;
 SDL_Renderer *Game::renderer = nullptr;
 SDL_Event Game::event;
 
+std::vector<ColliderComponent*> Game::colliders;
+
 //adds a new player to the entities
 auto& player(manager.addEntity());
-
 auto& wall(manager.addEntity());
 
 Game::Game()
@@ -48,10 +49,19 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 	//player = new GameObject("Assets/player.png", 0 ,0);
 	//enemy = new GameObject("Assets/enemy.png", 50, 50);
 	
-	
 	map = new Map();
 
-	player.addComponent<TransformComponent>();
+
+
+
+	// map below not made yet
+
+
+
+	//Map::LoadMap("Assets/p15x15.map", 16, 16);
+
+	//scale of 2, as 32 x 32 -> 64 x 64
+	player.addComponent<TransformComponent>(2);
 	player.addComponent<SpriteComponent>("Assets/player.png");
 	player.addComponent<KeyboardController>();
 	player.addComponent<ColliderComponent>("player");
@@ -84,6 +94,15 @@ void Game::update()
 	manager.refresh();
 	manager.update();
 
+	for (auto cc : colliders) {
+		Collision::AABB(player.getComponent<ColliderComponent>(), *cc);
+		//creates a bounce type of thing
+		//player.getComponent<TransformComponent>().velocity * -1;
+	}
+
+
+
+	
 	//player.getComponent<SpriteComponent>().setTex("Assets/enemy.png");
 /*	player->Update();
 	//updates entities and thus updates all the components
@@ -98,7 +117,6 @@ void Game::render()
 	//SDL_RenderCopy(renderer, playerTex, NULL, &destR);
 
 	//TextureManager has Draw func that does a render copy
-	map->DrawMap();
 	manager.draw();
 	//player->Render();
 
@@ -110,4 +128,10 @@ void Game::clean()
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
+}
+
+void Game::AddTile(int id, int x, int y) {
+	auto& tile(manager.addEntity());
+	//id = type of tile to create
+	tile.addComponent<TileComponent>(x,y,32,32, id);
 }
