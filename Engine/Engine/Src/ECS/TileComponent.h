@@ -5,17 +5,27 @@
 
 class TileComponent : public Component {
 public:
-	TransformComponent *transform;
-	SpriteComponent *sprite;
-
-	SDL_Rect tileRect;
-	int tileID;
-	const char* path;
+	SDL_Texture * texture;
+	SDL_Rect srcRect, destRect;
 
 	TileComponent() = default;
 
-	TileComponent(int x, int y, int w, int h, int id) {
-		tileRect.x = x;
+	~TileComponent() {
+		SDL_DestroyTexture(texture);
+	}
+	TileComponent(int srcX, int srcY, int xPos, int yPos, const char* path) {
+		
+		texture = TextureManager::LoadTexture(path);
+		srcRect.x = srcX;
+		srcRect.y = srcY;
+		srcRect.w = srcRect.h = 32;
+		destRect.x = xPos;
+		destRect.y = yPos;
+		//map class scale needs to me changed if changed here as well
+		destRect.w = destRect.h = 64;
+
+
+		/*tileRect.x = x;
 		tileRect.y = y;
 		tileRect.w = w;
 		tileRect.h = h;
@@ -34,13 +44,17 @@ public:
 			break;
 		default:
 			break;
-		}
+		}*/
 	}
 
-	void init() override {
+	/*void init() override {
 		entity->addComponent<TransformComponent>((float)tileRect.x, (float)tileRect.y, tileRect.w, tileRect.h, 1);
 		transform = &entity->getComponent<TransformComponent>();
 		entity->addComponent<SpriteComponent>(path);
 		sprite = &entity->getComponent<SpriteComponent>();
+	}*/
+
+	void draw() override {
+		TextureManager::Draw(texture, srcRect, destRect, SDL_FLIP_NONE);
 	}
 };

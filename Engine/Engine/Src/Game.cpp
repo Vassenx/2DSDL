@@ -14,9 +14,13 @@ SDL_Event Game::event;
 
 std::vector<ColliderComponent*> Game::colliders;
 
+bool Game::isRunning = false;
+
 //adds a new player to the entities
 auto& player(manager.addEntity());
 auto& wall(manager.addEntity());
+
+const char *mapFile = "Assets/terrain_ss.png";
 
 enum groupLabels : std::size_t {
 	//naming groups. up to 32
@@ -25,6 +29,10 @@ enum groupLabels : std::size_t {
 	groupEnemies,
 	groupColliders
 };
+
+auto& tiles(manager.getGroup(groupMap));
+auto& players(manager.getGroup(groupPlayers));
+auto& enemies(manager.getGroup(groupEnemies));
 
 Game::Game()
 {}
@@ -58,28 +66,20 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 	//enemy = new GameObject("Assets/enemy.png", 50, 50);
 	
 	map = new Map();
+    Map::LoadMap("Assets/map.map", 25, 20);
 
-
-
-
-	// map below not made yet, episode #14 Lets Make Games on how to build if artists don't know
-
-
-
-	//Map::LoadMap("Assets/p15x15.map", 16, 16);
-
-	//scale of 2, as 32 x 32 -> 64 x 64
-	player.addComponent<TransformComponent>(2);
+	//If scale of 2, as 32 x 32 -> 64 x 64
+	player.addComponent<TransformComponent>(4);
 	//true = isAnimated
 	player.addComponent<SpriteComponent>("Assets/player_anims.png", true);
 	player.addComponent<KeyboardController>();
 	player.addComponent<ColliderComponent>("player");
 	player.addGroup(groupPlayers);
 
-	wall.addComponent<TransformComponent>(300.0f, 300.0f, 300, 20, 1);
+	/*wall.addComponent<TransformComponent>(300.0f, 300.0f, 300, 20, 1);
 	wall.addComponent<SpriteComponent>("Assets/dirt.png");
 	wall.addComponent<ColliderComponent>("wall");
-	wall.addGroup(groupMap);
+	wall.addGroup(groupMap);*/
 }
 
 void Game::handleEvents()
@@ -102,14 +102,19 @@ void Game::update()
 	manager.refresh();
 	manager.update();
 
+	Vector2D pVel = player.getComponent<TransformComponent>().velocity;
+	int pSpeed = player.getComponent<TransformComponent>().speed;
+
+	for (auto t : tiles) {
+		t->getComponent<TileComponent>().destRect.x += -(pVel.x * pSpeed);
+		t->getComponent<TileComponent>().destRect.y += -(pVel.y * pSpeed);
+	}
+
 	for (auto cc : colliders) {
 		Collision::AABB(player.getComponent<ColliderComponent>(), *cc);
 		//creates a bounce type of thing
 		//player.getComponent<TransformComponent>().velocity * -1;
 	}
-
-
-
 	
 	//player.getComponent<SpriteComponent>().setTex("Assets/enemy.png");
 /*	player->Update();
@@ -117,10 +122,6 @@ void Game::update()
 	//map->LoadMap();
 */
 }
-
-auto& tiles(manager.getGroup(groupMap));
-auto& players(manager.getGroup(groupPlayers));
-auto& enemies(manager.getGroup(groupEnemies));
 
 void Game::render()
 {
@@ -145,9 +146,9 @@ void Game::clean()
 	SDL_Quit();
 }
 
-void Game::AddTile(int id, int x, int y) {
+void Game::AddTile(int srcX, int srcY, int xPos, int yPos){
 	auto& tile(manager.addEntity());
 	//id = type of tile to create
-	tile.addComponent<TileComponent>(x,y,32,32, id);
+	tile.addComponent<TileComponent>(srcX, srcY, xPos, yPos, mapFile);
 	tile.addGroup(groupMap);
 }

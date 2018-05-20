@@ -1,7 +1,7 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (C:\Dev\2DSDL\Engine\bin\intermediates\Win32\Debug\) contains files shared from another project (BirchEngine.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   Collision.cpp
   Game.cpp
-  GameObject.cpp
-  TextureManager.cpp
+c:\dev\2dsdl\engine\engine\src\game.cpp(109): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+c:\dev\2dsdl\engine\engine\src\game.cpp(110): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
   Generating Code...
   BirchEngine.vcxproj -> C:\Dev\2DSDL\Engine\bin\Win32\Debug\Engine.exe
