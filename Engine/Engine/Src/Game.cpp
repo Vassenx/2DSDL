@@ -62,7 +62,7 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 
 
 
-	// map below not made yet
+	// map below not made yet, episode #14 Lets Make Games on how to build if artists don't know
 
 
 
@@ -70,7 +70,8 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 
 	//scale of 2, as 32 x 32 -> 64 x 64
 	player.addComponent<TransformComponent>(2);
-	player.addComponent<SpriteComponent>("Assets/player.png");
+	//true = isAnimated
+	player.addComponent<SpriteComponent>("Assets/player_anims.png", true);
 	player.addComponent<KeyboardController>();
 	player.addComponent<ColliderComponent>("player");
 	player.addGroup(groupPlayers);
