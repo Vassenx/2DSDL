@@ -19,7 +19,10 @@ public:
 		position.Zero();
 	}
 	TransformComponent(int sc) {
-		position.Zero();
+		//position.Zero();
+		//middle of screen
+		position.x = 400;
+		position.y = 320; 
 		scale = sc;
 	}
 	TransformComponent(float x, float y) {
@@ -36,8 +39,8 @@ public:
 	}
 
 	void update() override {
-		position.x += velocity.x * speed;
-		position.y += velocity.y * speed;
+		//position.x += velocity.x * speed;
+		//position.y += velocity.y * speed;
 	}
 
 	//like Unity's onAwake
