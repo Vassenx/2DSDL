@@ -21,12 +21,19 @@ public:
 	void render();
 	void clean();
 
+	enum groupLabels : std::size_t {
+		//naming groups. up to 32
+		groupMap,
+		groupPlayers,
+		//groupEnemies,
+		groupColliders
+	};
+
 	//static: shared by all objects
-	static void AddTile(int srcX, int srcY, int xPos, int yPos);
 	static SDL_Renderer *renderer;
 	static SDL_Event event;
-	static std::vector<ColliderComponent*> colliders;
 	static bool isRunning;
+	static SDL_Rect camera;
 
 private:
 

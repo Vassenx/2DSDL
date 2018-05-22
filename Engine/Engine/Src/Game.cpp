@@ -12,27 +12,12 @@ Manager manager;
 SDL_Renderer *Game::renderer = nullptr;
 SDL_Event Game::event;
 
-std::vector<ColliderComponent*> Game::colliders;
+SDL_Rect Game::camera = { 0,0,800,640 };
 
 bool Game::isRunning = false;
 
 //adds a new player to the entities
 auto& player(manager.addEntity());
-auto& wall(manager.addEntity());
-
-const char *mapFile = "Assets/terrain_ss.png";
-
-enum groupLabels : std::size_t {
-	//naming groups. up to 32
-	groupMap,
-	groupPlayers,
-	groupEnemies,
-	groupColliders
-};
-
-auto& tiles(manager.getGroup(groupMap));
-auto& players(manager.getGroup(groupPlayers));
-auto& enemies(manager.getGroup(groupEnemies));
 
 Game::Game()
 {}
@@ -44,8 +29,7 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 {
 	int flags = 0;
 
-	if (fullscreen)
-	{
+	if (fullscreen)	{
 		flags = SDL_WINDOW_FULLSCREEN;
 	}
 
@@ -53,20 +37,15 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 	{
 		window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags);
 		renderer = SDL_CreateRenderer(window, -1, 0);
-		if (renderer)
-		{
+		if (renderer){
 			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		}
 
 		isRunning = true;
 	}
 	
-	//creates player texture through GameObject and TextureManager
-	//player = new GameObject("Assets/player.png", 0 ,0);
-	//enemy = new GameObject("Assets/enemy.png", 50, 50);
-	
-	map = new Map();
-    Map::LoadMap("Assets/map.map", 25, 20);
+	map = new Map("Asssets/terrain_ss.png", 3, 32);
+    map->LoadMap("Assets/map.map", 25, 20);
 
 	//If scale of 2, as 32 x 32 -> 64 x 64
 	player.addComponent<TransformComponent>(4);
@@ -76,15 +55,14 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 	player.addComponent<ColliderComponent>("player");
 	player.addGroup(groupPlayers);
 
-	/*wall.addComponent<TransformComponent>(300.0f, 300.0f, 300, 20, 1);
-	wall.addComponent<SpriteComponent>("Assets/dirt.png");
-	wall.addComponent<ColliderComponent>("wall");
-	wall.addGroup(groupMap);*/
 }
+
+auto& tiles(manager.getGroup(Game::groupMap));
+auto& players(manager.getGroup(Game::groupPlayers));
+auto& colliders(manager.getGroup(Game::groupColliders));
 
 void Game::handleEvents()
 {
-
 	SDL_PollEvent(&event);
 
 	switch (event.type)
@@ -97,30 +75,56 @@ void Game::handleEvents()
 	}
 }
 
-void Game::update()
-{
+void Game::update(){
+	SDL_Rect playerCol = player.getComponent<ColliderComponent>().collider;
+	//where player is before he moves in update
+	Vector2D playerPos = player.getComponent<TransformComponent>().position;
+
 	manager.refresh();
 	manager.update();
 
-	Vector2D pVel = player.getComponent<TransformComponent>().velocity;
+	for (auto& c : colliders) {
+		SDL_Rect cCol = c->getComponent<ColliderComponent>().collider;
+		if (Collision::AABB(cCol, playerCol)) {
+			std::cout << "Hit" << std::endl;
+			//push the player back
+			player.getComponent<TransformComponent>().position = playerPos;
+			//player.getComponent<TransformComponent>().velocity * -1;
+		}
+	}
+
+	//keep player in the middle
+	camera.x = player.getComponent<TransformComponent>().position.x - 400;
+	camera.y = player.getComponent<TransformComponent>().position.y - 320;
+
+	//bounds
+	if (camera.x < 0) {
+		camera.x = 0;
+	}
+	if (camera.y < 0) {
+		camera.y = 0;
+	}
+	//width/height should be length of map (25 by 20 times by 32 = 800 by 640)
+	if (camera.x > camera.w) {
+		camera.x = camera.w;
+	}
+	if (camera.y > camera.h) {
+		camera.y = camera.h;
+	}
+
+	//scrolling instead of player in middle
+
+	/*Vector2D pVel = player.getComponent<TransformComponent>().velocity;
 	int pSpeed = player.getComponent<TransformComponent>().speed;
 
 	for (auto t : tiles) {
 		t->getComponent<TileComponent>().destRect.x += -(pVel.x * pSpeed);
 		t->getComponent<TileComponent>().destRect.y += -(pVel.y * pSpeed);
 	}
-
-	for (auto cc : colliders) {
-		Collision::AABB(player.getComponent<ColliderComponent>(), *cc);
-		//creates a bounce type of thing
-		//player.getComponent<TransformComponent>().velocity * -1;
-	}
-	
+	*/
+	//changing player's sprite
 	//player.getComponent<SpriteComponent>().setTex("Assets/enemy.png");
-/*	player->Update();
-	//updates entities and thus updates all the components
-	//map->LoadMap();
-*/
+
 }
 
 void Game::render()
@@ -133,9 +137,13 @@ void Game::render()
 	for (auto& p : players) {
 		p->draw();
 	}
+	//if want to show where the colliders and enemies are on the actual map
+	/*for (auto& c : colliders) {
+		c->draw();
+	}
 	for (auto& e : enemies) {
 		e->draw();
-	}
+	}*/
 	SDL_RenderPresent(renderer);
 }
 
@@ -144,11 +152,4 @@ void Game::clean()
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
-}
-
-void Game::AddTile(int srcX, int srcY, int xPos, int yPos){
-	auto& tile(manager.addEntity());
-	//id = type of tile to create
-	tile.addComponent<TileComponent>(srcX, srcY, xPos, yPos, mapFile);
-	tile.addGroup(groupMap);
 }
