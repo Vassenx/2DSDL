@@ -44,11 +44,11 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 		isRunning = true;
 	}
 	
-	map = new Map("Asssets/terrain_ss.png", 3, 32);
+	map = new Map("Assets/terrain_ss.png", 3, 32);
     map->LoadMap("Assets/map.map", 25, 20);
 
 	//If scale of 2, as 32 x 32 -> 64 x 64
-	player.addComponent<TransformComponent>(4);
+	player.addComponent<TransformComponent>(800.0f,640.0f,32,32,4);
 	//true = isAnimated
 	player.addComponent<SpriteComponent>("Assets/player_anims.png", true);
 	player.addComponent<KeyboardController>();
@@ -134,14 +134,15 @@ void Game::render()
 	for (auto& t : tiles) {
 		t->draw();
 	}
+	//if want to show where the colliders and enemies are on the actual map
+	for (auto& c : colliders) {
+		c->draw();
+	}
 	for (auto& p : players) {
 		p->draw();
 	}
-	//if want to show where the colliders and enemies are on the actual map
-	/*for (auto& c : colliders) {
-		c->draw();
-	}
-	for (auto& e : enemies) {
+
+	/*for (auto& e : enemies) {
 		e->draw();
 	}*/
 	SDL_RenderPresent(renderer);

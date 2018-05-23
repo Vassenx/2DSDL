@@ -11,7 +11,6 @@ Map::Map(const char* mfp, int ms, int ts) : mapFilePath(mfp), mapScale(ms), tile
 	scaledSize = ms * ts;
 }
 
-
 Map::~Map() {
 }
 
@@ -30,9 +29,10 @@ void Map::LoadMap(std::string path, int sizeX, int sizeY) {
 			srcY = atoi(&c) * tileSize;
 
 			mapFile.get(c);
+			
 			srcX = atoi(&c) * tileSize;
-
-			AddTile(srcX, srcY, x * (scaledSize), y * (scaledSize));
+			
+			AddTile(srcX, srcY, x * scaledSize, y * scaledSize);
 			//ignores commas
 			mapFile.ignore();
 		}
@@ -46,7 +46,7 @@ void Map::LoadMap(std::string path, int sizeX, int sizeY) {
 			if (c == '1') {
 				//create a new collider entity/component
 				auto& tcol(manager.addEntity());
-				tcol.addComponent<ColliderComponent>("terrain", x * (scaledSize), y * (scaledSize), scaledSize);
+				tcol.addComponent<ColliderComponent>("terrain", x * scaledSize, y * scaledSize, scaledSize);
 				tcol.addGroup(Game::groupColliders);
 			}
 			mapFile.ignore(); 
