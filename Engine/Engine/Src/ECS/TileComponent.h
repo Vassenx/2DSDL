@@ -28,10 +28,7 @@ public:
 		//map class scale needs to me changed if changed here as well
 		destRect.w = destRect.h = tSize * tScale;
 
-		/*tileRect.x = x;
-		tileRect.y = y;
-		tileRect.w = w;
-		tileRect.h = h;
+		/*
 		tileID = id;
 
 		switch (tileID) {

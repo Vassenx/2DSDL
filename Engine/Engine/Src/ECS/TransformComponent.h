@@ -47,16 +47,4 @@ public:
 	void init() override {
 		velocity.Zero();
 	}
-
-	//can use the update, draw, etc of Component base class
-	/*getters and setters
-	int x() { return xPos; }
-	void x(int x) { xPos = x; }
-	int y() { return yPos; }
-
-	void setPos(int x, int y) {
-		xPos = x;
-		yPos = y;
-	}*/
-
 };

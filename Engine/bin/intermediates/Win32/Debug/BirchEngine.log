@@ -2,19 +2,24 @@
   Collision.cpp
 c:\dev\2dsdl\engine\engine\src\ecs\tilecomponent.h(20): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 c:\dev\2dsdl\engine\engine\src\ecs\tilecomponent.h(21): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\dev\2dsdl\engine\engine\src\ecs\tilecomponent.h(53): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\dev\2dsdl\engine\engine\src\ecs\tilecomponent.h(54): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\dev\2dsdl\engine\engine\src\ecs\tilecomponent.h(50): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\dev\2dsdl\engine\engine\src\ecs\tilecomponent.h(51): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  ECS.cpp
   Game.cpp
 c:\dev\2dsdl\engine\engine\src\ecs\tilecomponent.h(20): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 c:\dev\2dsdl\engine\engine\src\ecs\tilecomponent.h(21): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\dev\2dsdl\engine\engine\src\ecs\tilecomponent.h(53): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\dev\2dsdl\engine\engine\src\ecs\tilecomponent.h(54): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\dev\2dsdl\engine\engine\src\ecs\tilecomponent.h(50): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\dev\2dsdl\engine\engine\src\ecs\tilecomponent.h(51): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 c:\dev\2dsdl\engine\engine\src\game.cpp(97): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 c:\dev\2dsdl\engine\engine\src\game.cpp(98): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  GameObject.cpp
+  main.cpp
   Map.cpp
 c:\dev\2dsdl\engine\engine\src\ecs\tilecomponent.h(20): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 c:\dev\2dsdl\engine\engine\src\ecs\tilecomponent.h(21): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\dev\2dsdl\engine\engine\src\ecs\tilecomponent.h(53): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\dev\2dsdl\engine\engine\src\ecs\tilecomponent.h(54): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\dev\2dsdl\engine\engine\src\ecs\tilecomponent.h(50): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\dev\2dsdl\engine\engine\src\ecs\tilecomponent.h(51): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  TextureManager.cpp
+  Vector2D.cpp
   Generating Code...
   BirchEngine.vcxproj -> C:\Dev\2DSDL\Engine\bin\Win32\Debug\Engine.exe
