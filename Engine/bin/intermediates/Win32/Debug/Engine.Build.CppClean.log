@@ -8,12 +8,6 @@ c:\dev\2dsdl\engine\bin\intermediates\win32\debug\gameobject.obj
 c:\dev\2dsdl\engine\bin\intermediates\win32\debug\game.obj
 c:\dev\2dsdl\engine\bin\intermediates\win32\debug\ecs.obj
 c:\dev\2dsdl\engine\bin\intermediates\win32\debug\collision.obj
-c:\dev\2dsdl\engine\bin\win32\debug\engine.exe
-c:\dev\2dsdl\engine\bin\win32\debug\engine.ilk
-c:\dev\2dsdl\engine\bin\win32\debug\engine.pdb
 c:\dev\2dsdl\engine\bin\intermediates\win32\debug\engine.tlog\cl.command.1.tlog
 c:\dev\2dsdl\engine\bin\intermediates\win32\debug\engine.tlog\cl.read.1.tlog
 c:\dev\2dsdl\engine\bin\intermediates\win32\debug\engine.tlog\cl.write.1.tlog
-c:\dev\2dsdl\engine\bin\intermediates\win32\debug\engine.tlog\link.command.1.tlog
-c:\dev\2dsdl\engine\bin\intermediates\win32\debug\engine.tlog\link.read.1.tlog
-c:\dev\2dsdl\engine\bin\intermediates\win32\debug\engine.tlog\link.write.1.tlog

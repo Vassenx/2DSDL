@@ -3,11 +3,12 @@
 #include <fstream>
 #include "ECS\ECS.h"
 #include "ECS\Components.h"
+#include <string>
 
 //defined in Game.cpp
 extern Manager manager;
 
-Map::Map(const char* mfp, int ms, int ts) : mapFilePath(mfp), mapScale(ms), tileSize(ts) {
+Map::Map(std::string tID, int ms, int ts) : texID(tID), mapScale(ms), tileSize(ts) {
 	scaledSize = ms * ts;
 }
 
@@ -57,6 +58,6 @@ void Map::LoadMap(std::string path, int sizeX, int sizeY) {
 void Map::AddTile(int srcX, int srcY, int xPos, int yPos) {
 	auto& tile(manager.addEntity());
 	//id = type of tile to create
-	tile.addComponent<TileComponent>(srcX, srcY, xPos, yPos, tileSize, mapScale, mapFilePath);
+	tile.addComponent<TileComponent>(srcX, srcY, xPos, yPos, tileSize, mapScale, texID);
 	tile.addGroup(Game::groupMap);
 }
