@@ -5,10 +5,10 @@
 #include <iostream>
 #include <vector>
 
+class AssetManager;
 class ColliderComponent;
 
-class Game
-{
+class Game{
 public:
 	Game();
 	~Game();
@@ -21,19 +21,21 @@ public:
 	void render();
 	void clean();
 
-	enum groupLabels : std::size_t {
-		//naming groups. up to 32
-		groupMap,
-		groupPlayers,
-		//groupEnemies,
-		groupColliders
-	};
-
 	//static: shared by all objects
 	static SDL_Renderer *renderer;
 	static SDL_Event event;
 	static bool isRunning;
 	static SDL_Rect camera;
+    static AssetManager *assets;
+
+	enum groupLabels : std::size_t {
+		//naming groups. up to 32
+		groupMap,
+		groupPlayers,
+		//groupEnemies,
+		groupColliders,
+		groupProjectiles
+	};
 
 private:
 

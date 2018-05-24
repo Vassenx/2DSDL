@@ -4,6 +4,7 @@
 #include "ECS/Components.h" //Components has all types of components included within
 #include "Vector2D.h"
 #include "Collision.h"
+#include "AssetManager.h"
 
 Map *map;
 Manager manager;
@@ -13,6 +14,8 @@ SDL_Renderer *Game::renderer = nullptr;
 SDL_Event Game::event;
 
 SDL_Rect Game::camera = { 0,0,800,640 };
+
+AssetManager* Game::assets = new AssetManager(&manager);
 
 bool Game::isRunning = false;
 
@@ -44,22 +47,31 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 		isRunning = true;
 	}
 	
-	map = new Map("Assets/terrain_ss.png", 3, 32);
+	assets->AddTexture("terrain", "Assets/terrain_ss.png");
+	assets->AddTexture("player", "Assets/player_anims.png");
+	assets->AddTexture("projectile", "Assets/enemy.png");
+
+	//uses id from AssetManager
+	map = new Map("terrain", 3, 32);
     map->LoadMap("Assets/map.map", 25, 20);
 
 	//If scale of 2, as 32 x 32 -> 64 x 64
 	player.addComponent<TransformComponent>(800.0f,640.0f,32,32,4);
 	//true = isAnimated
-	player.addComponent<SpriteComponent>("Assets/player_anims.png", true);
+	//uses id from AssetManager
+	player.addComponent<SpriteComponent>("player", true);
 	player.addComponent<KeyboardController>();
 	player.addComponent<ColliderComponent>("player");
 	player.addGroup(groupPlayers);
+
+	assets->CreateProjectile(Vector2D(600.0f, 600.0f),Vector2D(2,0), 200, 2, "projectile");
 
 }
 
 auto& tiles(manager.getGroup(Game::groupMap));
 auto& players(manager.getGroup(Game::groupPlayers));
 auto& colliders(manager.getGroup(Game::groupColliders));
+auto& projectiles(manager.getGroup(Game::groupProjectiles));
 
 void Game::handleEvents()
 {
@@ -93,9 +105,15 @@ void Game::update(){
 		}
 	}
 
+	for (auto& pr : projectiles) {
+		if (Collision::AABB(player.getComponent<ColliderComponent>().collider, pr->getComponent<ColliderComponent>().collider)) {
+			pr->destroy();
+		}
+	}
+
 	//keep player in the middle
-	camera.x = player.getComponent<TransformComponent>().position.x - 400;
-	camera.y = player.getComponent<TransformComponent>().position.y - 320;
+	camera.x = static_cast<int>(player.getComponent<TransformComponent>().position.x - 400);
+	camera.y = static_cast<int>(player.getComponent<TransformComponent>().position.y - 320);
 
 	//bounds
 	if (camera.x < 0) {
@@ -140,6 +158,10 @@ void Game::render()
 	}
 	for (auto& p : players) {
 		p->draw();
+	}
+	//over top of players is projectiles
+	for (auto& pr : projectiles) {
+		pr->draw();
 	}
 
 	/*for (auto& e : enemies) {

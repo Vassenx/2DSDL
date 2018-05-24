@@ -1,7 +1,8 @@
 #pragma once
-#include "TransformComponent.h"
 #include "ECS.h"
-#include "SDL.h" //for SDL_Rect
+#include "../Vector2D.h"
+#include "../Game.h"
+#include "../TextureManager.h"
 
 class TileComponent : public Component {
 public:
@@ -14,11 +15,12 @@ public:
 	~TileComponent() {
 		SDL_DestroyTexture(texture);
 	}
-	TileComponent(int srcX, int srcY, int xPos, int yPos, int tSize, int tScale, const char* path) {
+	TileComponent(int srcX, int srcY, int xPos, int yPos, int tSize, int tScale, std::string id) {
 		
-		texture = TextureManager::LoadTexture(path);
-		position.x = xPos;
-		position.y = yPos;
+		texture = Game::assets->GetTexture(id);
+
+		position.x = static_cast<int>(xPos);
+		position.y = static_cast<int>(yPos);
 
 		srcRect.x = srcX;
 		srcRect.y = srcY;
@@ -47,8 +49,8 @@ public:
 		}*/
 	}
 	void update() override {
-		destRect.x = position.x - Game::camera.x;
-		destRect.y = position.y - Game::camera.y;
+		destRect.x = static_cast<int>(position.x - Game::camera.x);
+		destRect.y = static_cast<int>(position.y - Game::camera.y);
 	}
 	void draw() override {
 		TextureManager::Draw(texture, srcRect, destRect, SDL_FLIP_NONE);
