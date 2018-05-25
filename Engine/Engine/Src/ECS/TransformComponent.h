@@ -1,6 +1,7 @@
 #pragma once
 #include "Components.h"
 #include "../Vector2D.h"
+#include "Game.h"
 
 class TransformComponent : public Component {
 
@@ -39,8 +40,14 @@ public:
 	}
 
 	void update() override {
+
 		position.x += velocity.x * speed;
 		position.y += velocity.y * speed;
+
+		//stop from dropping off the bottom of screen
+		if (position.y >= Game::camera.y + Game::camera.h - 150 ) {
+			position.y = Game::camera.y + Game::camera.h - 150;
+		}
 	}
 
 	//like Unity's onAwake
