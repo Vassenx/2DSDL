@@ -62,6 +62,7 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 	player.addComponent<SpriteComponent>("player", true);
 	player.addComponent<KeyboardController>();
 	player.addComponent<ColliderComponent>("player");
+	player.addComponent<Gravity>();
 	player.addGroup(groupPlayers);
 
 	assets->CreateProjectile(Vector2D(600.0f, 600.0f),Vector2D(2,0), 200, 2, "projectile");
