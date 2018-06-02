@@ -1,8 +1,0 @@
-﻿  Game.cpp
-  GameObject.cpp
-  main.cpp
-  Map.cpp
-  TextureManager.cpp
-  Vector2D.cpp
-  Generating Code...
-  BirchEngine.vcxproj -> C:\Dev\2DSDL\Engine\Engine\bin\Win32\Debug\Engine.exe
