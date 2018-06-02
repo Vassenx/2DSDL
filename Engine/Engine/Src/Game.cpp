@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Game.h"
 #include "TextureManager.h" //textures
 #include "Map.h"
@@ -60,13 +62,14 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 	//true = isAnimated
 	//uses id from AssetManager
 	player.addComponent<SpriteComponent>("player", true);
+	player.addComponent<Gravity>();
+	//change this for water zones
+	player.getComponent<Gravity>().wantGravity = true;
 	player.addComponent<KeyboardController>();
 	player.addComponent<ColliderComponent>("player");
-	player.addComponent<Gravity>();
 	player.addGroup(groupPlayers);
 
 	assets->CreateProjectile(Vector2D(600.0f, 600.0f),Vector2D(2,0), 200, 2, "projectile");
-
 }
 
 auto& tiles(manager.getGroup(Game::groupMap));
@@ -93,6 +96,8 @@ void Game::update(){
 	//where player is before he moves in update
 	Vector2D playerPos = player.getComponent<TransformComponent>().position;
 
+	std::cout << player.getComponent<TransformComponent>().velocity.y << std::endl;
+
 	manager.refresh();
 	manager.update();
 
@@ -100,9 +105,15 @@ void Game::update(){
 		SDL_Rect cCol = c->getComponent<ColliderComponent>().collider;
 		if (Collision::AABB(cCol, playerCol)) {
 			std::cout << "Hit" << std::endl;
-			//push the player back
-			player.getComponent<TransformComponent>().position = playerPos;
-			//player.getComponent<TransformComponent>().velocity * -1;
+
+
+			//BUG: The collision is being detected again before the player can move away, which
+			//means the collision happens a few times.
+
+			//player.getComponent<TransformComponent>().position = playerPos;
+			player.getComponent<Gravity>().wantGravity = false;
+			player.getComponent<TransformComponent>().velocity.y 
+				+= player.getComponent<TransformComponent>().velocity.y * -5;
 		}
 	}
 
@@ -143,7 +154,6 @@ void Game::update(){
 	*/
 	//changing player's sprite
 	//player.getComponent<SpriteComponent>().setTex("Assets/enemy.png");
-
 }
 
 void Game::render()

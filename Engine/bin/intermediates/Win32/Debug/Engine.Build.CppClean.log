@@ -2,12 +2,13 @@ c:\dev\2dsdl\engine\bin\intermediates\win32\debug\vc141.pdb
 c:\dev\2dsdl\engine\bin\intermediates\win32\debug\vc141.idb
 c:\dev\2dsdl\engine\bin\intermediates\win32\debug\vector2d.obj
 c:\dev\2dsdl\engine\bin\intermediates\win32\debug\texturemanager.obj
-c:\dev\2dsdl\engine\bin\intermediates\win32\debug\map.obj
 c:\dev\2dsdl\engine\bin\intermediates\win32\debug\main.obj
 c:\dev\2dsdl\engine\bin\intermediates\win32\debug\gameobject.obj
-c:\dev\2dsdl\engine\bin\intermediates\win32\debug\game.obj
 c:\dev\2dsdl\engine\bin\intermediates\win32\debug\ecs.obj
+c:\dev\2dsdl\engine\bin\intermediates\win32\debug\map.obj
+c:\dev\2dsdl\engine\bin\intermediates\win32\debug\game.obj
 c:\dev\2dsdl\engine\bin\intermediates\win32\debug\collision.obj
+c:\dev\2dsdl\engine\bin\intermediates\win32\debug\assetmanager.obj
 c:\dev\2dsdl\engine\bin\intermediates\win32\debug\engine.tlog\cl.command.1.tlog
 c:\dev\2dsdl\engine\bin\intermediates\win32\debug\engine.tlog\cl.read.1.tlog
 c:\dev\2dsdl\engine\bin\intermediates\win32\debug\engine.tlog\cl.write.1.tlog

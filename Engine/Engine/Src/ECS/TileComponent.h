@@ -19,8 +19,8 @@ public:
 		
 		texture = Game::assets->GetTexture(id);
 
-		position.x = static_cast<int>(xPos);
-		position.y = static_cast<int>(yPos);
+		position.x = (float)(xPos);
+		position.y = (float)(yPos);
 
 		srcRect.x = srcX;
 		srcRect.y = srcY;
