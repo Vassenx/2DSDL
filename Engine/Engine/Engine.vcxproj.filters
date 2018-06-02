@@ -92,7 +92,7 @@
     <ClInclude Include="Src\ECS\ProjectileComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Physics\Physics.h">
+    <ClInclude Include="Src\Physics\Gravity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,7 +1,7 @@
 #pragma once
 #include "Components.h"
 #include "../Vector2D.h"
-#include "Game.h"
+#include "../Game.h"
 
 class TransformComponent : public Component {
 
@@ -46,7 +46,7 @@ public:
 
 		//stop from dropping off the bottom of screen
 		if (position.y >= Game::camera.y + Game::camera.h - 150 ) {
-			position.y = Game::camera.y + Game::camera.h - 150;
+			position.y = (float)Game::camera.y + Game::camera.h - 150;
 		}
 	}
 

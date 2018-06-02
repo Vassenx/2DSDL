@@ -6,7 +6,7 @@
 #include <vector>
 
 class AssetManager;
-class ColliderComponent;
+//class ColliderComponent;
 
 class Game{
 public:

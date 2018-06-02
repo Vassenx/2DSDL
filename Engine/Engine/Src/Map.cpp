@@ -20,6 +20,9 @@ void Map::LoadMap(std::string path, int sizeX, int sizeY) {
 	std::fstream mapFile;
 	mapFile.open(path);
 
+	//int mapSizeY = sizeY;
+	//int mapSizeX = sizeX;
+
 	int srcX, srcY;
 
 	//move through each tile
