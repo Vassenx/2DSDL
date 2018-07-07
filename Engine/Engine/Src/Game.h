@@ -6,9 +6,10 @@
 #include <vector>
 
 class AssetManager;
-//class ColliderComponent;
+class ColliderComponent;
 
 class Game{
+
 public:
 	Game();
 	~Game();
@@ -38,7 +39,6 @@ public:
 	};
 
 private:
-
 	int cnt = 0;
 	SDL_Window *window;
 };

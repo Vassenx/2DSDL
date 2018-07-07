@@ -117,6 +117,7 @@ public:
 };
 
 class Manager {
+
 private:
 	std::vector<std::unique_ptr<Entity>> entities;
 	//maxGroups = size, has entity pointers
