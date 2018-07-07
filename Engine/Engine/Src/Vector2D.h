@@ -4,7 +4,7 @@
 //v1.add(vec) or v1 + v2 or v1 += v2
 
 class Vector2D {
-	
+
 public:
 	float x, y;
 

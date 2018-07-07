@@ -9,6 +9,9 @@ GameObject::GameObject(const char* textureSheet, int x, int y) {
 	yPos = y;
 }
 
+GameObject::~GameObject() {
+}
+
 void GameObject::Update() {
 
 	xPos++;

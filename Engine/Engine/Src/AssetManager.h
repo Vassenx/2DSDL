@@ -6,6 +6,7 @@
 #include "ECS\ECS.h"  //for manager
 
 class AssetManager {
+
 public:
 	AssetManager(Manager *man);
 	~AssetManager();

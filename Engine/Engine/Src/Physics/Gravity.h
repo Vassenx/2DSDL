@@ -5,23 +5,11 @@
 
 //F = ma
 class Gravity : public Component {
-public:
-	void update() override {
-		//for multiple forces later on, Euler method
-		//accl = force / mass;
-		//transform->velocity += (accl * time_step);
-		//transform->position += (transform->velocity * time_step);
 
-		if (wantGravity) {
-			transform->velocity.y += gravity;
-            //capping the velocity 
-			transform->velocity.y = fminf(transform->velocity.y, maxSpeed);
-		}
-	}
-	void init() override {
-		transform = &entity->getComponent<TransformComponent>();
-	}
+public:
+	void update() override;
 	bool wantGravity = true;
+	void init() override;
 
 private:
 	/*Vector2D force = Vector2D(0, 1);
