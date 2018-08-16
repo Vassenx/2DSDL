@@ -36,18 +36,26 @@ public:
 	SpriteComponent(std::string id, bool isAnimated) {
 		animated = isAnimated;
 
+		/*
 		//index is x or row of large animation picture
-		Animation idle = Animation(0, 3, 100);
+		Animation idle = Animation(0, 4, 100);
 		Animation walk = Animation(1, 8, 100);
 		
 		animations.emplace("Idle", idle);
 		animations.emplace("Walk", walk);
+		*/
 
-		Play("Idle");
+		//Play("Idle");
 		setTex(id);
 	}
 
 	~SpriteComponent() {
+	}
+
+	void addAnimation(const char* anim_id, int index, int frames, int delay)
+	{
+		Animation anim = Animation(index, frames, delay);
+		animations.emplace(anim_id, anim); 
 	}
 
 	void setTex(std::string id) {

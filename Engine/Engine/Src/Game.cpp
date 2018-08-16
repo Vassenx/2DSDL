@@ -23,6 +23,8 @@ bool Game::isRunning = false;
 
 //adds a new player to the entities
 auto& player(manager.addEntity());
+auto& enemy(manager.addEntity()); 
+auto& jellyfish(manager.addEntity()); 
 
 Game::Game()
 {}
@@ -52,22 +54,51 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 	assets->AddTexture("terrain", "Assets/terrain_ss.png");
 	assets->AddTexture("player", "Assets/player_anims.png");
 	assets->AddTexture("projectile", "Assets/enemy.png");
+	assets->AddTexture("mermaid", "Assets/MermaidSheet.png"); 
+	assets->AddTexture("jellyfish", "Assets/JellyV3coloured.png");
 
 	//uses id from AssetManager
 	map = new Map("terrain", 3, 32);
     map->LoadMap("Assets/map.map", 25, 20);
 
 	//If scale of 2, as 32 x 32 -> 64 x 64
-	player.addComponent<TransformComponent>(800.0f,640.0f,32,32,4);
+	player.addComponent<TransformComponent>(600.0f,640.0f,32,32,4);
+
 	//true = isAnimated
 	//uses id from AssetManager
 	player.addComponent<SpriteComponent>("player", true);
-	player.addComponent<Gravity>();
+
+	SpriteComponent& PlayerSpriteComponent = player.getComponent<SpriteComponent>(); 
+
+	PlayerSpriteComponent.addAnimation("Idle", 0, 3, 100);
+	PlayerSpriteComponent.addAnimation("Walk", 1, 8, 100);
+	PlayerSpriteComponent.Play("Idle");
+	//player.addComponent<Gravity>();
 	//change this for water zones
-	player.getComponent<Gravity>().wantGravity = true;
+	//player.getComponent<Gravity>().wantGravity = false;
 	player.addComponent<KeyboardController>();
 	player.addComponent<ColliderComponent>("player");
+	//player.addComponent<Gravity>(manager.getGroup(Game::groupColliders)); 
+	
 	player.addGroup(groupPlayers);
+
+	//Create test enemy
+	enemy.addComponent<TransformComponent>(800.0f, 700.0f, 64, 64, 2); 
+	enemy.addComponent<SpriteComponent>("mermaid", true); 
+	enemy.addComponent<ColliderComponent>("enemy"); 
+	enemy.getComponent<SpriteComponent>().addAnimation("Idle", 0, 8, 100); 
+	enemy.getComponent<SpriteComponent>().Play("Idle"); 
+	enemy.addGroup(groupPlayers); 
+
+	jellyfish.addComponent<TransformComponent>(600.0f, 500.0f, 64, 64, 2); 
+	jellyfish.addComponent<ColliderComponent>("jellyfish"); 
+	jellyfish.addComponent<SpriteComponent>("jellyfish", true); 
+	
+	SpriteComponent& JFishSpriteComponent = jellyfish.getComponent<SpriteComponent>(); 
+	JFishSpriteComponent.addAnimation("Idle", 0, 7, 100); 
+	JFishSpriteComponent.Play("Idle"); 
+	jellyfish.addGroup(groupPlayers); 
+
 
 	assets->CreateProjectile(Vector2D(600.0f, 600.0f),Vector2D(2,0), 200, 2, "projectile");
 }
@@ -96,26 +127,44 @@ void Game::update(){
 	//where player is before he moves in update
 	Vector2D playerPos = player.getComponent<TransformComponent>().position;
 
-	std::cout << player.getComponent<TransformComponent>().velocity.y << std::endl;
+	//std::cout << player.getComponent<TransformComponent>().velocity.y << std::endl;
+	//player.getComponent<Gravity>().wantGravity ? std::cout << "true" << std::endl : std::cout << "false" << std::endl; 
 
 	manager.refresh();
 	manager.update();
 
+	bool collision = false; 
+	
 	for (auto& c : colliders) {
 		SDL_Rect cCol = c->getComponent<ColliderComponent>().collider;
 		if (Collision::AABB(cCol, playerCol)) {
 			std::cout << "Hit" << std::endl;
-
+			collision = true; 
+			
+			
 
 			//BUG: The collision is being detected again before the player can move away, which
 			//means the collision happens a few times.
 
-			//player.getComponent<TransformComponent>().position = playerPos;
-			player.getComponent<Gravity>().wantGravity = false;
+			player.getComponent<TransformComponent>().position.y = playerPos.y;
+			//player.getComponent<Gravity>().wantGravity = false;
+			
 			player.getComponent<TransformComponent>().velocity.y 
 				+= player.getComponent<TransformComponent>().velocity.y * -5;
 		}
 	}
+	
+
+	if (collision)
+	{
+		player.getComponent<TransformComponent>().position.y = playerPos.y;
+		//player.getComponent<Gravity>().wantGravity = false;
+	} 
+	else
+	{
+		//player.getComponent<Gravity>().wantGravity = true;
+	}
+
 
 	for (auto& pr : projectiles) {
 		if (Collision::AABB(player.getComponent<ColliderComponent>().collider, pr->getComponent<ColliderComponent>().collider)) {
@@ -164,12 +213,16 @@ void Game::render()
 		t->draw();
 	}
 	//if want to show where the colliders and enemies are on the actual map
+
 	for (auto& c : colliders) {
 		c->draw();
 	}
+	
 	for (auto& p : players) {
 		p->draw();
+		p->getComponent<ColliderComponent>().draw(); 
 	}
+
 	//over top of players is projectiles
 	for (auto& pr : projectiles) {
 		pr->draw();

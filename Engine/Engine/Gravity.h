@@ -1,7 +1,9 @@
 #pragma once
+#include "Vector2D.h"
+#include "Collision.h"
+#include "Components.h"
 
-#include "../ECS/ECS.h"
-
+//F = ma
 class Gravity : public Component {
 public:
 	Gravity(std::vector<Entity*>& clders) : colliders(clders)
@@ -10,11 +12,8 @@ public:
 
 	void init() override {
 		transform = &entity->getComponent<TransformComponent>();
-		//ColliderComponent* cp = &entity->getComponent<ColliderComponent>();
-		SpriteComponent* sprite = &entity->getComponent<SpriteComponent>(); 
-		//SDL_Rect rect = cp->collider; 
-		int ind = sprite->animIndex; 
-		int t_height = transform->height; 
+		playerColliderComponent = &entity->getComponent<ColliderComponent>();
+		ColliderComponent cc = *playerColliderComponent;
 	}
 
 	void update() override {
@@ -23,25 +22,25 @@ public:
 		//transform->velocity += (accl * time_step);
 		//transform->position += (transform->velocity * time_step);
 
-		
+
 		if (wantGravity) {
 			transform->velocity.y += gravity;
-            //capping the velocity 
+			//capping the velocity 
 			transform->velocity.y = fminf(transform->velocity.y, maxSpeed);
-			std::cout << "Gravity" << std::endl; 
+			std::cout << "Gravity" << std::endl;
 
-			SDL_Rect playerCol = collider->collider;
-			
+			SDL_Rect playerCol = playerColliderComponent->collider;
+
 			for (auto& c : colliders) {
-				//SDL_Rect cCol = c->getComponent<ColliderComponent>().collider;
+				SDL_Rect cCol = c->getComponent<ColliderComponent>().collider;
 				/*
 				if (Collision::AABB(cCol, playerCol)) {
-					std::cout << "Y-Hit" << std::endl;
+				std::cout << "Y-Hit" << std::endl;
 				}*/
 			}
 		}
 		else {
-			transform->velocity.y = 0; 
+			transform->velocity.y = 0;
 			std::cout << "No Gravity" << std::endl;
 		}
 	}
@@ -57,7 +56,7 @@ private:
 	float maxSpeed = 10.0f;
 	float gravity = 0.8f;
 	TransformComponent *transform;
-	ColliderComponent *collider; 
+	ColliderComponent *playerColliderComponent;
 
-	std::vector<Entity*>& colliders; 
+	std::vector<Entity*>& colliders;
 };

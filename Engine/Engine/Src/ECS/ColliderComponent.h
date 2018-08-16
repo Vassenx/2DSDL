@@ -15,6 +15,7 @@ public:
 	SDL_Rect srcR, destR;
 
 	TransformComponent *transform;
+
 	
 	ColliderComponent(std::string t) {
 		tag = t;
@@ -45,6 +46,11 @@ public:
 			collider.y = static_cast<int>(transform->position.y);
 			collider.w = transform->width * transform->scale;
 			collider.h = transform->height * transform->scale;
+
+			destR.x = collider.x; 
+			destR.y = collider.y; 
+			destR.w = collider.w; 
+			destR.h = collider.h; 
 		}
 		//make sure the collider keeps updating to correct spot on screen
 		destR.x = collider.x - Game::camera.x;

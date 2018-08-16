@@ -14,11 +14,12 @@ public:
 	int width = 32;
 	int scale = 1;
 
-	int speed = 3;
+	int speed = 1;
 
 	TransformComponent() {
 		position.Zero();
 	}
+
 	TransformComponent(int sc) {
 		//position.Zero();
 		//middle of screen
@@ -26,6 +27,7 @@ public:
 		position.y = 320; 
 		scale = sc;
 	}
+
 	TransformComponent(float x, float y) {
 		position.x = x;
 		position.y = y;
@@ -53,5 +55,6 @@ public:
 	//like Unity's onAwake
 	void init() override {
 		velocity.Zero();
+		
 	}
 };
