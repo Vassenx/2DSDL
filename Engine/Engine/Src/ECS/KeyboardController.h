@@ -1,7 +1,9 @@
 #pragma once
 
+#include "ECS.h"
 #include "../Game.h"
-#include "Components.h"
+#include "TransformComponent.h"
+#include "SpriteComponent.h"
 
 class KeyboardController : public Component {
 public:
@@ -23,15 +25,26 @@ public:
 
 
 			case SDLK_a:
-				transform->velocity.x = -1;
+				transform->velocity.x = -3;
 				sprite->Play("Walk");
 				sprite->spriteFlip = SDL_FLIP_HORIZONTAL;
 				break;
 			case SDLK_d:
-				transform->velocity.x = 1;
+				transform->velocity.x = 3;
 				sprite->Play("Walk");
 				break;
-			//case SDLK_SPACE:   for swimming?
+			case SDLK_w:
+				if (!transform->gravity)
+					transform->velocity.y = -3;
+				break;
+			case SDLK_s:
+				if (!transform->gravity)
+					transform->velocity.y = 3;
+				break; 
+			case SDLK_SPACE:   
+				if (transform->gravity)
+					transform->velocity.y = -20.0f; 
+				break; 
 
 			default: 
 				break;
@@ -55,6 +68,14 @@ public:
 				}
 				sprite->Play("Idle");
 				break;
+			case SDLK_w:
+				if (transform->velocity.y < 0 && !transform->gravity)
+					transform->velocity.y = 0;
+				break;
+			case SDLK_s: 
+				if (transform->velocity.y > 0 && !transform->gravity)
+					transform->velocity.y = 0;
+				break; 
 
 			case SDLK_ESCAPE:
 				Game::isRunning = false;

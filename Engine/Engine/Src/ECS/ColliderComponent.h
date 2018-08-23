@@ -1,7 +1,9 @@
 #pragma once
 #include <string>
 #include "SDL.h"
-#include "Components.h"
+//#include "Components.h"
+#include "ECS.h"
+#include "TransformComponent.h"
 #include "../TextureManager.h"
 
 class ColliderComponent : public Component {
@@ -38,6 +40,11 @@ public:
 		srcR = { 0,0,32,32 };
 		destR = { collider.x, collider.y, collider.w, collider.h };
 
+	}
+
+	friend std::ostream& operator<< (std::ostream& out, const ColliderComponent cc) {
+		out << "Collider Position (" << cc.collider.x << ", " << cc.collider.y << ")" << std::endl; 
+		return out; 
 	}
 
 	void update() override {

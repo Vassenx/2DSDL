@@ -3,6 +3,7 @@
 #include "../Vector2D.h"
 #include "../Game.h"
 #include "../TextureManager.h"
+#include "../AssetManager.h"
 
 class TileComponent : public Component {
 public:
