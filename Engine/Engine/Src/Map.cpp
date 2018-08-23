@@ -2,7 +2,8 @@
 #include "Game.h" //to get map file
 #include <fstream>
 #include "ECS\ECS.h"
-#include "ECS\Components.h"
+#include "ECS\TileComponent.h"
+#include "ECS\ColliderComponent.h"
 #include <string>
 
 //defined in Game.cpp
