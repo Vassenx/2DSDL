@@ -1,63 +1,58 @@
-#pragma once
-
-#include "ECS.h"
-#include "../Game.h"
-#include "TransformComponent.h"
-#include "SpriteComponent.h"
-
-class Gravity;
-class SpriteComponent;
-
-class KeyboardController : public Component {
-
-public:
-	TransformComponent *transform;
-	SpriteComponent *sprite;
-	//Gravity *grav;
+#include "KeyboardController.h"
 
 	//keep transform as it is for the entity at the current time
-	void init() override {
+	void KeyboardController::init()  {
 		transform = &entity->getComponent<TransformComponent>();
 		sprite = &entity->getComponent<SpriteComponent>();
-		//grav = &entity->getComponent<Gravity>();
+		grav = &entity->getComponent<Gravity>();
+		col = &entity->getComponent<ColliderComponent>();
 	}
 
-	void update() override {
-		if (Game::event.type == SDL_KEYDOWN ) {
+	void KeyboardController::update()  {
+		if (Game::event.type == SDL_KEYDOWN) {
 			//virtual code for the key
 			switch (Game::event.key.keysym.sym) {
 
+			case SDLK_w:
+				//change speeds depending on swimming or walking
+				//negative addition is up as 0,0 is top left corner
+				if (grav->wantGravity == false) {
+					transform->velocity.y = -1;
+					sprite->Play("Walk");
+					col->tag = "to";
+					std::cout << col->collider.h;
+				}
+				break;
 
 			case SDLK_a:
-				transform->velocity.x = -3;
+				transform->velocity.x = -1;
 				sprite->Play("Walk");
 				sprite->spriteFlip = SDL_FLIP_HORIZONTAL;
 				break;
 			case SDLK_d:
-				transform->velocity.x = 3;
+				transform->velocity.x = 1;
 				sprite->Play("Walk");
 				break;
-			case SDLK_w:
-				if (!transform->gravity)
-					transform->velocity.y = -3;
-				break;
 			case SDLK_s:
-				if (!transform->gravity)
-					transform->velocity.y = 3;
-				break; 
-			case SDLK_SPACE:   
-				if (transform->gravity)
-					transform->velocity.y = -20.0f; 
-				break; 
+				transform->velocity.y = 1;
+				sprite->Play("Walk");
+				break;
+				//case SDLK_SPACE:   for swimming?
 
-			default: 
+			default:
 				break;
 			}
 		}
 		if (Game::event.type == SDL_KEYUP) {
 			switch (Game::event.key.keysym.sym) {
-			//reset back to 0 once done pressing
-
+				//reset back to 0 once done pressing
+			case SDLK_w:
+				if (transform->velocity.y < 0) {
+					//negative addition is up
+					transform->velocity.y = 0;
+				}
+				sprite->Play("Idle");
+				break;
 			case SDLK_a:
 				if (transform->velocity.x < 0) {
 					transform->velocity.x = 0;
@@ -72,15 +67,12 @@ public:
 				}
 				sprite->Play("Idle");
 				break;
-			case SDLK_w:
-				if (transform->velocity.y < 0 && !transform->gravity)
+			case SDLK_s:
+				if (transform->velocity.y > 0) {
 					transform->velocity.y = 0;
+				}
+				sprite->Play("Idle");
 				break;
-			case SDLK_s: 
-				if (transform->velocity.y > 0 && !transform->gravity)
-					transform->velocity.y = 0;
-				break; 
-
 			case SDLK_ESCAPE:
 				Game::isRunning = false;
 				break;
@@ -89,4 +81,3 @@ public:
 			}
 		}
 	}
-};

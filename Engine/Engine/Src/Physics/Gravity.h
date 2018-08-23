@@ -60,8 +60,9 @@ public:
 			std::cout << "No Gravity" << std::endl;
 		}
 	}
-
+  
 	bool wantGravity = true;
+	void init() override;
 
 
 };

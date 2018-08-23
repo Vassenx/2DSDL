@@ -13,7 +13,7 @@ public:
 	int height = 32;
 	int width = 32;
 	int scale = 1;
-
+  
 	bool gravity = false; 
 
 	TransformComponent() {
@@ -64,8 +64,6 @@ public:
 		position.y += velocity.y; 
 	}
 
-	//like Unity's onAwake
-	void init() override {
-		velocity.Zero();
-	}
+	void update() override;
+	void init() override;
 };

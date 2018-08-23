@@ -9,38 +9,21 @@
 class ColliderComponent : public Component {
 
 public:
-
 	SDL_Rect collider;
 	std::string tag;
 
 	SDL_Texture *tex;
 	SDL_Rect srcR, destR;
-
+  
 	TransformComponent *transform;
+  
+	ColliderComponent(std::string t);
+	ColliderComponent(std::string t, int xPos, int yPos, int size);
 
-	
-	ColliderComponent(std::string t) {
-		tag = t;
-	}
-	ColliderComponent(std::string t, int xPos, int yPos, int size) {
-		tag = t;
-		collider.x = xPos;
-		collider.y = yPos;
-		collider.h = collider.w = size;
-	}
+	void init() override;
 
-	void init() override {
-		//error checking
-		if (!entity->hasComponent<TransformComponent>()) {
-			entity->addComponent<TransformComponent>();
-		}
-		transform = &entity->getComponent<TransformComponent>();
-
-		tex = TextureManager::LoadTexture("Assets/ColTex.png");
-		srcR = { 0,0,32,32 };
-		destR = { collider.x, collider.y, collider.w, collider.h };
-
-	}
+	void update() override;
+	void draw() override;
 
 	friend std::ostream& operator<< (std::ostream& out, const ColliderComponent cc) {
 		out << "Collider Position (" << cc.collider.x << ", " << cc.collider.y << ")" << std::endl; 

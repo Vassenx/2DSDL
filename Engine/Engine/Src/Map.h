@@ -2,8 +2,8 @@
 #include <string>
 
 class Map {
-public:
 
+public:
 	Map(std::string tID, int ms, int ts);
 	~Map();
 
