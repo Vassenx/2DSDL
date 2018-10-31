@@ -4,6 +4,7 @@
 #include "ECS\ECS.h"
 #include "ECS\TileComponent.h"
 #include "ECS\ColliderComponent.h"
+#include "ECS\TriggerComponent.h"
 #include <string>
 
 //defined in Game.cpp
@@ -51,11 +52,38 @@ void Map::LoadMap(std::string path, int sizeX, int sizeY) {
 			if (c == '1') {
 				//create a new collider entity/component
 				auto& tcol(manager.addEntity());
-				tcol.addComponent<ColliderComponent>("terrain", x * scaledSize, y * scaledSize, scaledSize);
+				tcol.addComponent<ColliderComponent>(TT_TERRAIN, x * scaledSize, y * scaledSize, scaledSize);
+				tcol.addGroup(Game::groupColliders);
+
+			}
+			else if (c == '2')
+			{
+				auto& tcol(manager.addEntity());
+				tcol.addComponent<ColliderComponent>(TT_WATER, x * scaledSize, y * scaledSize, scaledSize);
 				tcol.addGroup(Game::groupColliders);
 			}
-			mapFile.ignore(); 
+			else if (c == '3')
+			{
+				auto& tcol(manager.addEntity());
+				tcol.addComponent<ColliderComponent>(TT_LADDER, x * scaledSize, y * scaledSize, scaledSize);
+				tcol.addGroup(Game::groupColliders);
+			}
+			else if (c == '4')
+			{
+				auto& tcol(manager.addEntity());
+				tcol.addComponent<ColliderComponent>(TT_WATER_SURFACE, x * scaledSize, y * scaledSize, scaledSize);
+				tcol.addGroup(Game::groupColliders);
+			}
+			else if (c == '5')
+			{
+				auto& tcol(manager.addEntity());
+				tcol.addComponent<ColliderComponent>(TT_ONE_WAY, x * scaledSize, y * scaledSize, scaledSize);
+				tcol.addGroup(Game::groupColliders);
+			}
+
+			mapFile.ignore();
 		}
+		std::cout << "\n";
 	}
 	mapFile.close();
 }

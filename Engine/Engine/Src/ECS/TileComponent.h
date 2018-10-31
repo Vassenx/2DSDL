@@ -15,6 +15,7 @@ public:
 	TileComponent() = default;
 
 	~TileComponent();
+
 	TileComponent(int srcX, int srcY, int xPos, int yPos, int tSize, int tScale, std::string id);
 
 	void update() override;

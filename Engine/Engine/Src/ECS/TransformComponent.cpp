@@ -1,7 +1,9 @@
 #include "TransformComponent.h"
+#include "ECS.h"
 
 TransformComponent::TransformComponent() {
 	position.Zero();
+	velocity.Zero();
 }
 
 TransformComponent::TransformComponent(int sc) {
@@ -25,15 +27,13 @@ TransformComponent::TransformComponent(float x, float y, int h, int w, int sc) {
 	scale = sc;
 }
 
-void TransformComponent::update() {
-
-	position.x += velocity.x * speed;
-	position.y += velocity.y * speed;
-
-	//stop from dropping off the bottom of screen
-	if (position.y >= Game::camera.y + Game::camera.h - 150) {
-		position.y = (float)Game::camera.y + Game::camera.h - 150;
-	}
+TransformComponent::TransformComponent(float x, float y, int h, int w, int sc, bool grav) {
+	position.x = x;
+	position.y = y;
+	height = h;
+	width = w;
+	scale = sc;
+	gravity = grav;
 }
 
 //like Unity's onAwake

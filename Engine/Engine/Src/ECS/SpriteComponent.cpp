@@ -1,4 +1,5 @@
 #include "SpriteComponent.h"
+#include "TransformComponent.h"
   
 SpriteComponent::SpriteComponent(std::string id) {
     setTex(id);
@@ -6,14 +7,6 @@ SpriteComponent::SpriteComponent(std::string id) {
 SpriteComponent::SpriteComponent(std::string id, bool isAnimated) {
 	animated = isAnimated;
 
-	//index is x or row of large animation picture
-	Animation idle = Animation(0, 3, 100);
-	Animation walk = Animation(1, 8, 100);
-
-	animations.emplace("Idle", idle);
-	animations.emplace("Walk", walk);
-
-	Play("Idle");
 	setTex(id);
 }
 void SpriteComponent::setTex(std::string id) {

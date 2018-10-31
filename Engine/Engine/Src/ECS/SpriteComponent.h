@@ -21,24 +21,8 @@ public:
 
 	SpriteComponent() = default;
 	//path to texture to use
-	SpriteComponent(std::string id) {
-		setTex(id);
-	}
-	SpriteComponent(std::string id, bool isAnimated) {
-		animated = isAnimated;
-
-		/*
-		//index is x or row of large animation picture
-		Animation idle = Animation(0, 4, 100);
-		Animation walk = Animation(1, 8, 100);
-		
-		animations.emplace("Idle", idle);
-		animations.emplace("Walk", walk);
-		*/
-
-		//Play("Idle");
-		setTex(id);
-	}
+	SpriteComponent(std::string id);
+	SpriteComponent(std::string id, bool isAnimated);
 
 	~SpriteComponent() {
 	}
@@ -49,9 +33,7 @@ public:
 		animations.emplace(anim_id, anim); 
 	}
 
-	void setTex(std::string id) {
-		texture = Game::assets->GetTexture(id);
-	}
+	void setTex(std::string id);
 
 	void init() override;
 	void update() override;

@@ -7,6 +7,12 @@
 #include <bitset>
 #include <array>
 
+
+//This entity component system is from a tutorial.
+//TUTORIAL CODE, MADE BY Let's Make Games Youtube channel 
+
+
+
 class Component;
 class Entity;
 class Manager;

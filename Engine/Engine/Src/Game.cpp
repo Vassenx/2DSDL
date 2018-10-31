@@ -8,8 +8,9 @@
 #include "AssetManager.h"
 #include "../Src/ECS/ColliderComponent.h"
 #include "../Src/ECS/SpriteComponent.h"
-#include "../Src/Physics/Gravity.h"
 #include "../Src/ECS/KeyboardController.h"
+#include "../Src/ECS//ColliderComponent.h"
+#include <map>
 
 Map *map;
 Manager manager;
@@ -28,6 +29,8 @@ bool Game::isRunning = false;
 auto& player(manager.addEntity());
 auto& enemy(manager.addEntity()); 
 auto& jellyfish(manager.addEntity()); 
+
+std::map<SDL_Keycode, KEY_STATE> Game::keyStateArray;
 
 Game::Game()
 {}
@@ -55,9 +58,9 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 	}
 	
 	assets->AddTexture("terrain", "Assets/terrain_ss.png");
-	assets->AddTexture("player", "Assets/player_anims.png");
+	assets->AddTexture("player", "Assets/player_char.png");
 	assets->AddTexture("projectile", "Assets/enemy.png");
-	assets->AddTexture("mermaid", "Assets/MermaidSheet.png"); 
+	assets->AddTexture("mermaid", "Assets/merman.png"); 
 	assets->AddTexture("jellyfish", "Assets/JellyV3coloured.png");
 
 	//uses id from AssetManager
@@ -65,7 +68,7 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
     map->LoadMap("Assets/map.map", 25, 20);
 
 	//If scale of 2, as 32 x 32 -> 64 x 64
-	player.addComponent<TransformComponent>(600.0f,640.0f,32,32,4, true);
+	player.addComponent<TransformComponent>(800.0f,640.0f,100,100,1, true);
 
 	//true = isAnimated
 	//uses id from AssetManager
@@ -73,28 +76,29 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 
 	SpriteComponent& PlayerSpriteComponent = player.getComponent<SpriteComponent>(); 
 
-	PlayerSpriteComponent.addAnimation("Idle", 0, 3, 100);
-	PlayerSpriteComponent.addAnimation("Walk", 1, 8, 100);
+	PlayerSpriteComponent.addAnimation("Idle", 0, 1, 100);
+	PlayerSpriteComponent.addAnimation("Walk", 0, 1, 100);
+	PlayerSpriteComponent.addAnimation("Swim", 1, 10, 100);
 	PlayerSpriteComponent.Play("Idle");
 	//player.addComponent<Gravity>();
 	//change this for water zones
 	//player.getComponent<Gravity>().wantGravity = false;
 	player.addComponent<KeyboardController>();
-	player.addComponent<ColliderComponent>("player");
+	player.addComponent<ColliderComponent>(TT_PLAYER);
 	//player.addComponent<Gravity>(); 
 	
 	player.addGroup(groupPlayers);
 
 	//Create test enemy
-	enemy.addComponent<TransformComponent>(800.0f, 700.0f, 64, 64, 2, false); 
+	enemy.addComponent<TransformComponent>(800.0f, 700.0f, 64, 64, 2, true); 
 	enemy.addComponent<SpriteComponent>("mermaid", true); 
-	enemy.addComponent<ColliderComponent>("enemy"); 
-	enemy.getComponent<SpriteComponent>().addAnimation("Idle", 0, 8, 100); 
+	enemy.addComponent<ColliderComponent>(TT_ENEMY); 
+	enemy.getComponent<SpriteComponent>().addAnimation("Idle", 0, 8, 200); 
 	enemy.getComponent<SpriteComponent>().Play("Idle"); 
 	enemy.addGroup(groupPlayers); 
 
-	jellyfish.addComponent<TransformComponent>(600.0f, 500.0f, 64, 64, 2, false); 
-	jellyfish.addComponent<ColliderComponent>("jellyfish"); 
+	jellyfish.addComponent<TransformComponent>(500.0f, 1100.0f, 64, 64, 2, true); 
+	jellyfish.addComponent<ColliderComponent>(TT_JFISH); 
 	jellyfish.addComponent<SpriteComponent>("jellyfish", true); 
 	
 	SpriteComponent& JFishSpriteComponent = jellyfish.getComponent<SpriteComponent>(); 
@@ -120,112 +124,65 @@ void Game::handleEvents()
 	case SDL_QUIT :
 		isRunning = false;
 		break;
+	case SDL_KEYDOWN:
+		switch (event.key.keysym.sym) {
+		case SDLK_a:
+			keyStateArray[SDLK_a] = KEY_PRESSED;
+			break;
+		case SDLK_d:
+			keyStateArray[SDLK_d] = KEY_PRESSED;
+			break;
+		case SDLK_w:
+			keyStateArray[SDLK_w] = KEY_PRESSED;
+			break;
+		case SDLK_s:
+			keyStateArray[SDLK_s] = KEY_PRESSED;
+			break;
+		case SDLK_SPACE:
+			keyStateArray[SDLK_SPACE] = KEY_PRESSED;
+			break;
+		default:
+			break;
+		}
+		break;
+	case SDL_KEYUP:
+		switch (event.key.keysym.sym) {
+		case SDLK_a:
+			keyStateArray[SDLK_a] = KEY_RELEASED;
+			break;
+		case SDLK_d:
+			keyStateArray[SDLK_d] = KEY_RELEASED;
+			break;
+		case SDLK_w:
+			keyStateArray[SDLK_w] = KEY_RELEASED;
+			break;
+		case SDLK_s:
+			keyStateArray[SDLK_s] = KEY_RELEASED;
+			break;
+		case SDLK_SPACE:
+			keyStateArray[SDLK_SPACE] = KEY_RELEASED;
+			break;
+		default:
+			break;
+		}
+		break;
 	default:
 		break;
 	}
 }
 
 void Game::update(){
-	//SDL_Rect playerCol = player.getComponent<ColliderComponent>().collider;
-	//where player is before he moves in update
+
 	Vector2D playerPos = player.getComponent<TransformComponent>().position;
 	TransformComponent& playerTransform = player.getComponent<TransformComponent>(); 
-
-	//float lastFramePlayerPos = playerTransform.position.x; 
-	//float lastFramePlayerY = playerTransform.position.y; 
-	//std::cout << player.getComponent<TransformComponent>().velocity.y << std::endl;
-	//player.getComponent<Gravity>().wantGravity ? std::cout << "true" << std::endl : std::cout << "false" << std::endl; 
 
 	manager.refresh();
 	manager.update();
 
-	/*
-	float currentFramePlayerPos = playerTransform.position.x; 
-	float currentFramePlayerY = playerTransform.position.y; 
-
-	bool collision = false; 
+	checkCollisions(player);
+	checkCollisions(enemy);
+	checkCollisions(jellyfish);
 	
-	float directionX = currentFramePlayerPos - lastFramePlayerPos; 
-	float directionY = currentFramePlayerY - lastFramePlayerY;
-	*/
-	
-	bool collision = false;
-
-	ColliderComponent& playerComp = player.getComponent<ColliderComponent>();
-	SDL_Rect& playerCol = playerComp.collider;
-
-	float lastPlayerPosX = playerTransform.position.x;
-	playerTransform.updateX(); 
-	playerComp.update(); 
-	float currentPlayerPosX = playerTransform.position.x; 
-	float directionX = currentPlayerPosX - lastPlayerPosX;
-
-	for (auto& c : colliders) {
-		ColliderComponent cComp = c->getComponent<ColliderComponent>();
-		SDL_Rect cCol = cComp.collider;
-
-		if (Collision::AABB(cCol, playerCol)) {
-			collision = true;
-
-			std::cout << "X Components: " << std::endl;
-			//std::cout << cComp;
-			if (directionX < 0) {
-				playerTransform.position.x = cCol.x + cCol.w;
-				std::cout << "Player Pos X: " << playerTransform.position.x << std::endl;
-				playerComp.update();
-				std::cout << "Player Collider Pos X: " << playerCol.x << std::endl;
-			}
-
-			if (directionX > 0) {
-				playerTransform.position.x = cCol.x - playerCol.w;
-				std::cout << "Player Pos X: " << playerTransform.position.x << std::endl;
-				playerComp.update();
-			}
-		}
-	}
-
-	float lastPlayerPosY = playerTransform.position.y;
-	playerTransform.updateY();
-	
-	float currentPlayerPosY = playerTransform.position.y;
-	float directionY = currentPlayerPosY - lastPlayerPosY;
-
-	playerComp.update(); 
-
-	for (auto& c : colliders) {
-		ColliderComponent cComp = c->getComponent<ColliderComponent>(); 
-		SDL_Rect cCol = cComp.collider;
-
-	
-		if (Collision::AABB(cCol, playerCol)) {
-			collision = true; 
-			std::cout << "Y Components: " << std::endl; 
-			//std::cout << cComp; 
-			if (playerTransform.gravity)
-				playerTransform.velocity.y = 0; 
-
-			if (directionY < 0) {
-				playerTransform.position.y = cCol.y + cCol.h;
-				std::cout << "Player Pos Y: " << playerTransform.position.y << std::endl; 
-				playerComp.update();
-				std::cout << "Player Collider Pos Y: " << playerCol.y << std::endl;
-			}
-
-			if (directionY > 0) {
-				playerTransform.position.y = cCol.y - playerCol.h;
-				playerComp.update(); 
-			}
-		}
-	}
-
-
-	if (collision)
-		std::cout << "--------------------------------" << std::endl; 
-
-	//std::cout << "(" << playerTransform.position.x << ", " << playerTransform.position.y << ")" << std::endl;
-	//std::cout << collision << std::endl; 
-
-
 	for (auto& pr : projectiles) {
 		if (Collision::AABB(player.getComponent<ColliderComponent>().collider, pr->getComponent<ColliderComponent>().collider)) {
 			pr->destroy();
@@ -251,18 +208,6 @@ void Game::update(){
 		camera.y = camera.h;
 	}
 
-	//scrolling instead of player in middle
-
-	/*Vector2D pVel = player.getComponent<TransformComponent>().velocity;
-	int pSpeed = player.getComponent<TransformComponent>().speed;
-
-	for (auto t : tiles) {
-		t->getComponent<TileComponent>().destRect.x += -(pVel.x * pSpeed);
-		t->getComponent<TileComponent>().destRect.y += -(pVel.y * pSpeed);
-	}
-	*/
-	//changing player's sprite
-	//player.getComponent<SpriteComponent>().setTex("Assets/enemy.png");
 }
 
 void Game::render()
@@ -299,4 +244,129 @@ void Game::clean()
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
+}
+
+void Game::checkCollisions(Entity& entity)
+{
+	bool collision = false;
+
+	ColliderComponent& playerComp = entity.getComponent<ColliderComponent>();
+	TransformComponent& playerTransform = entity.getComponent<TransformComponent>();
+
+	SDL_Rect& playerCol = playerComp.collider;
+
+	float lastPlayerPosX = playerTransform.position.x;
+	playerTransform.updateX();
+	playerComp.update();
+	float currentPlayerPosX = playerTransform.position.x;
+	float directionX = currentPlayerPosX - lastPlayerPosX;
+
+
+	for (auto& c : colliders) {
+		ColliderComponent cComp = c->getComponent<ColliderComponent>();
+		SDL_Rect cCol = cComp.collider;
+
+
+		if (Collision::AABB(cCol, playerCol)) {
+			collision = true;
+			if (cComp.tag == TT_TERRAIN) {
+				//std::cout << "X Components: " << std::endl;
+				//std::cout << cComp;
+				if (directionX < 0) {
+					playerTransform.position.x = cCol.x + cCol.w;
+					//std::cout << "Player Pos X: " << playerTransform.position.x << std::endl;
+					playerComp.update();
+					//std::cout << "Player Collider Pos X: " << playerCol.x << std::endl;
+				}
+
+				if (directionX > 0) {
+					playerTransform.position.x = cCol.x - playerCol.w;
+					//std::cout << "Player Pos X: " << playerTransform.position.x << std::endl;
+					playerComp.update();
+				}
+			}
+
+		}
+	}
+
+	float lastPlayerPosY = playerTransform.position.y;
+	playerTransform.updateY();
+
+	float currentPlayerPosY = playerTransform.position.y;
+	float directionY = currentPlayerPosY - lastPlayerPosY;
+
+	playerComp.update();
+	playerTransform.onLadder = false;
+	playerTransform.onWaterSurface = false;
+	playerTransform.onOneWay = false;
+
+	for (auto& c : colliders) {
+		ColliderComponent cComp = c->getComponent<ColliderComponent>();
+		SDL_Rect cCol = cComp.collider;
+
+
+		if (Collision::AABB(cCol, playerCol)) {
+			collision = true;
+			//std::cout << "Y Components: " << std::endl;
+			//std::cout << cComp.tag << "\n";
+			//std::cout << cComp; 
+			if (cComp.tag == TT_LADDER) {
+				float playerCenter = playerComp.collider.x + (playerComp.collider.w / 2);
+
+				float tileLeftEdge = cCol.x;
+				float tileRightEdge = cCol.x + cCol.w;
+
+				if (playerCenter > tileLeftEdge && playerCenter < tileRightEdge)
+					playerTransform.onLadder = true;
+			}
+
+			if (cComp.tag == TT_WATER_SURFACE) {
+				playerTransform.onWaterSurface = true;
+			}
+
+			if (cComp.tag == TT_TERRAIN) {
+				if (playerTransform.gravity)
+					playerTransform.velocity.y = 0;
+
+				if (directionY < 0) {
+					playerTransform.position.y = cCol.y + cCol.h;
+					//std::cout << "Player Pos Y: " << playerTransform.position.y << std::endl;
+					playerComp.update();
+					//	std::cout << "Player Collider Pos Y: " << playerCol.y << std::endl;
+				}
+
+				if (directionY > 0) {
+					playerTransform.position.y = cCol.y - playerCol.h;
+					playerComp.update();
+				}
+			}
+			else if (cComp.tag == TT_WATER)
+			{
+				//std::cout << "I'm in water!";
+				playerTransform.inWater = true;
+				playerTransform.gravity = false;
+			}
+			else if (cComp.tag == TT_ONE_WAY) {
+				// if above platform
+				if (lastPlayerPosY + playerCol.h <= cCol.y) {
+					playerTransform.velocity.y = 0;
+					playerTransform.position.y = cCol.y - playerCol.h;
+					playerComp.update();
+					playerTransform.onOneWay = true;
+				}
+
+
+			}
+		}
+
+	}
+
+	if (!playerTransform.onLadder) {
+		playerTransform.gravity = true;
+	}
+
+	if (!collision && playerTransform.inWater) {
+		playerTransform.inWater = false;
+		playerTransform.gravity = true;
+	}
 }

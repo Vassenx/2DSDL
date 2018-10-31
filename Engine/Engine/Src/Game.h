@@ -4,13 +4,22 @@
 #include "SDL_image.h"
 #include <iostream>
 #include <vector>
+#include <map>
 
 class AssetManager;
 class ColliderComponent;
+class Entity;
+
+enum KEY_STATE {
+	KEY_RELEASED,
+    KEY_PRESSED
+};
 
 class Game{
 
 public:
+	static std::map<SDL_Keycode, KEY_STATE> keyStateArray;
+
 	Game();
 	~Game();
 
@@ -21,6 +30,7 @@ public:
 	bool running() { return isRunning; }
 	void render();
 	void clean();
+	void checkCollisions(Entity&);
 
 	//static: shared by all objects
 	static SDL_Renderer *renderer;
